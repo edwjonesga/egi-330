@@ -81,7 +81,32 @@ Run the exact same `docker run` command a second time to begin your development 
   docker run -it --rm -v "%cd%":/workspace egi-330-env
   ```
 
-You are now inside your development environment, which has all the necessary tools and your project files. You can push the initial commit by running:
+You are now inside your development environment, which has all the necessary tools and your project files.
+
+### Step 7: Authenticate with GitHub
+
+Before you can push your code to your GitHub repository, you need to authenticate. We've included the GitHub CLI to make this easy.
+
+Inside the container, run the following command:
+```sh
+gh auth login
+```
+
+This command will ask you a few questions:
+- **What account do you want to log into?** Select `GitHub.com`.
+- **What is your preferred protocol for Git operations?** Select `HTTPS`.
+- **Authenticate Git with your GitHub credentials?** Select `Y` (Yes).
+- **How would you like to authenticate?** Select `Login with a web browser`.
+
+It will then give you a one-time code and ask you to open a URL in your browser. Copy the code, then open the link in your web browser on your main computer (not in the container) and paste the code to authorize the CLI.
+
+After you've authenticated, you can proceed to the final step.
+
+### Step 8: Push Your Initial Commit
+
+Now that you are authenticated, you can push your initial commit to your remote repository on GitHub.
+
+Run the following command:
 ```sh
 git push -u origin main
 ```
