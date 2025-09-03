@@ -54,9 +54,11 @@ RUN echo '#!/bin/bash' > /usr/local/bin/init.sh && \
     echo '' >> /usr/local/bin/init.sh && \
     echo 'echo "----------------------------------------------------"' >> /usr/local/bin/init.sh && \
     echo 'echo "Initialization complete!"' >> /usr/local/bin/init.sh && \
-    echo 'echo "You can now start working on your project."' >> /usr/local/bin/init.sh && \
-    echo 'echo "Push your initial commit to your GitHub repository with: git push -u origin main"' >> /usr/local/bin/init.sh && \
-    echo 'echo "----------------------------------------------------"' >> /usr/local/bin/init.sh
+    echo 'echo ""' >> /usr/local/bin/init.sh && \
+    echo 'echo "This container will now exit."' >> /usr/local/bin/init.sh && \
+    echo 'echo "Please run the same '\''docker run'\'' command again to start your development session."' >> /usr/local/bin/init.sh && \
+    echo 'echo "----------------------------------------------------"' >> /usr/local/bin/init.sh && \
+    echo 'exit 0' >> /usr/local/bin/init.sh
 
 # Make the script executable
 RUN chmod +x /usr/local/bin/init.sh
