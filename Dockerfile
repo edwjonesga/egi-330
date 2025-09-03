@@ -25,16 +25,18 @@ RUN echo '#!/bin/bash' > /usr/local/bin/init.sh && \
     echo '# Copy files to the workspace' >> /usr/local/bin/init.sh && \
     echo 'echo "Copying project files into your workspace..."' >> /usr/local/bin/init.sh && \
     echo 'cp -r /tmp/egi-330-source/* /workspace/' >> /usr/local/bin/init.sh && \
-    echo 'cp -r /tmp/egi-330-source/.github /workspace/' >> /usr/local/bin/init.sh &&\
     echo '' >> /usr/local/bin/init.sh && \
     echo '# Initialize a new git repository' >> /usr/local/bin/init.sh && \
     echo 'echo "Initializing a new git repository..."' >> /usr/local/bin/init.sh && \
+    echo 'cd /workspace/' >> /usr/local/bin/init.sh && \
+    echo 'git config --global --add safe.directory /workspace' >> /usr/local/bin/init.sh && 
     echo 'git init' >> /usr/local/bin/init.sh && \
     echo '' >> /usr/local/bin/init.sh && \
     echo '# Commit initial files and create branches' >> /usr/local/bin/init.sh && \
     echo 'echo "Committing initial project files to main branch..."' >> /usr/local/bin/init.sh && \
     echo 'git checkout -b main' >> /usr/local/bin/init.sh && \
     echo 'git add .' >> /usr/local/bin/init.sh && \
+    echo 'git config --global user.email "init@egi-330init.ccu.edu";git config --global user.name "EGI Init Script"' >> /usr/local/bin/init.sh
     echo 'git commit -m "Initial commit of project files"' >> /usr/local/bin/init.sh && \
     echo '' >> /usr/local/bin/init.sh && \
     echo '# Create source-update-branch from main' >> /usr/local/bin/init.sh && \
