@@ -1,106 +1,97 @@
-# EGI-330 Assignment Setup
+# EGI-330 Project Setup
 
-Welcome to EGI-330! This guide will walk you through setting up your development environment using a two-stage Docker process.
+Welcome to EGI-330! This guide will walk you through setting up your development environment using Docker. The process has been streamlined to get you up and running as quickly as possible.
 
-## Stage 1: Initialization
+## Setup Instructions
 
-This first stage will set up your GitHub repository and clone it to your local machine.
+Follow these steps to prepare your local development environment.
 
-### Step 1: Download the Initial Dockerfile
+### Step 1: Create a Repository on GitHub
 
-First, you need to download the `Dockerfile` for the initialization process.
+First, create a new, empty repository on your GitHub account. You can name it whatever you like (e.g., `egi-330-assignments`). **Do not** initialize it with a README, .gitignore, or license file. You just need an empty repository.
 
-[Download the Dockerfile here](https://raw.githubusercontent.com/edwjonesga/edwjones-ccu/main/classes/egi-330/Dockerfile)
-
-Save this file in a new, empty directory on your computer. Make sure the file is named `Dockerfile` with no extension.
+After creating the repository, copy its HTTPS URL. You will need it later. It should look something like this: `https://github.com/your-username/your-repo-name.git`.
 
 ### Step 2: Install Docker
 
-Please follow the instructions below to install Docker on your operating system if you haven't already.
+If you don't already have Docker installed, please follow the instructions for your operating system.
 
-#### Windows
-1. Download Docker Desktop from [Docker’s official website](https://www.docker.com/products/docker-desktop/).
-2. Run the installer and follow the prompts.
-3. After installation, launch Docker Desktop and ensure it is running.
+- **Windows/Mac:** Download and install [Docker Desktop](https://www.docker.com/products/docker-desktop).
+- **Linux:** Follow the official instructions to install the [Docker Engine](https://docs.docker.com/engine/install/).
 
-#### Mac
-1. Open Terminal.
-2. Install Homebrew if it is not already installed by running the following command:
-    ```sh
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    ```
-3. Run the following command to install Docker using Homebrew:
-    ```sh
-    brew install --cask docker
-    ```
-4. Start Docker from the command line:
-    ```sh
-    open /Applications/Docker.app
-    ```
-5. Verify Docker installation by running:
-    ```sh
-    docker --version
-    ```
+### Step 3: Download the Dockerfile
 
-#### Linux
-1. Open a terminal.
-2. Run the following commands:
-    ```sh
-    sudo apt-get update
-    sudo apt-get install docker.io
-    ```
-3. Verify Docker installation with:
-    ```sh
-    docker --version
-    ```
+Download the `Dockerfile` from this repository and place it in a new, empty directory on your computer.
 
-### Step 3: Run the Initialization Script
+[**Click here to download the Dockerfile**](https://raw.githubusercontent.com/edwjonesga/egi-330/main/Dockerfile)
 
-This step will create your personal GitHub repository for this class and clone it to your machine.
+Make sure the downloaded file is named `Dockerfile` with no file extension.
 
-1.  Open a terminal (Command Prompt on Windows, Terminal on Mac/Linux).
-2.  Navigate to the directory where you saved the `Dockerfile`.
-3.  Build the initializer Docker image:
+### Step 4: Build the Docker Image
 
-    ```sh
-    docker build -t egi-330-init-env .
-    ```
+Open a terminal (or PowerShell on Windows) in the directory where you saved the `Dockerfile` and run the following command to build the Docker image:
 
-4.  Run the initializer container, mounting your current directory into the container's `/workspace`:
+```sh
+docker build -t egi-330-env .
+```
 
-    ```sh
-    docker run -it --rm -v "$(pwd)":/workspace egi-330-init-env
-    ```
+This command creates a Docker image named `egi-330-env` that contains all the necessary tools for this course.
 
-5.  The container will run the `init.sh` script, which will guide you through the GitHub setup process. At the end, it will clone your new repository into the directory you are in and then exit.
+### Step 5: Run the Docker Container
 
-## Stage 2: Development Environment
+Next, run the container. This command will start an interactive shell inside the container and mount your current directory to the `/workspace` directory inside the container. This means any files you create in `/workspace` will appear in your local directory, and vice-versa.
 
-After the initialization is complete, you will have a new directory containing your assignment repository. You will use this for your development work.
+- **For Linux and Mac:**
+  ```sh
+  docker run -it --rm -v "$(pwd)":/workspace egi-330-env
+  ```
 
-1.  In your local terminal, change into your new repository directory. The name will be what you chose during the initialization script.
-    ```sh
-    cd <your-repo-name>
-    ```
+- **For Windows (using PowerShell):**
+  ```sh
+  docker run -it --rm -v "${PWD}:/workspace" egi-330-env
+  ```
 
-2.  Build your development Docker image using the provided script:
-    ```sh
-    ./buildContainer.sh
-    ```
+- **For Windows (using Command Prompt):**
+  ```sh
+  docker run -it --rm -v "%cd%":/workspace egi-330-env
+  ```
 
-3.  Start your development container using the provided script:
-    ```sh
-    ./startContainer.sh
-    ```
+You are now inside the Docker container's shell.
 
-You will now be inside your development container, with all the necessary tools and your repository files mounted in the `/workspace` directory. Happy coding!
+### Step 6: Initialize Your Project
 
-## Keeping Your Repository Up-to-Date
+Inside the container's shell, run the `init.sh` script to set up your project:
 
-Your instructor may push updates to the class repository from time to time. To get these updates into your own repository, you can use the `pull-updates.sh` script.
+```sh
+init.sh
+```
+
+The script will ask for the GitHub repository URL you copied in Step 1. Paste it in and press Enter. The script will then:
+1.  Copy the project files into your directory.
+2.  Initialize a local Git repository.
+3.  Set your GitHub repository as the `origin` remote.
+
+After the script finishes, you can push your new repository to GitHub by running:
+```sh
+git push -u origin main
+```
+
+## Keeping Your Project Up-to-Date
+
+Your instructor may provide updates to the project files. To get these updates, you can use the `pull-updates.sh` script.
 
 From within your development container, simply run:
 ```sh
-pull-updates.sh
+./bin/pull-updates.sh
 ```
-This will pull the latest changes from the class repository. If there are any changes to the `Dockerfile`, you will need to rebuild and restart your development container by running `./buildContainer.sh` and then `./startContainer.sh` again.
+This script will fetch the latest changes and merge them into your `main` branch. If there are any updates to the `Dockerfile` itself, you will need to exit the container, rebuild the image (Step 4), and then restart the container (Step 5).
+
+## MySQL Database
+
+This development environment includes a running MySQL server. The server starts automatically when you launch the container.
+
+You can connect to the database from within the container using the MySQL client:
+```sh
+mysql -u root
+```
+By default, the `root` user has no password. You can use this database for your development work.
