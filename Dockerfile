@@ -61,10 +61,13 @@ RUN echo '#!/bin/bash' > /usr/local/bin/init.sh && \
 # Make the script executable
 RUN chmod +x /usr/local/bin/init.sh
 
-# Copy and set up the entrypoint
-COPY entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/entrypoint.sh
-ENTRYPOINT ["entrypoint.sh"]
+# Create and set up the entrypoint script
+RUN echo '#!/bin/bash' > /usr/local/bin/entrypoint.sh && \
+    echo 'echo "Starting MySQL service..."' >> /usr/local/bin/entrypoint.sh && \
+    echo 'service mysql start' >> /usr/local/bin/entrypoint.sh && \
+    echo 'exec "$@"' >> /usr/local/bin/entrypoint.sh && \
+    chmod +x /usr/local/bin/entrypoint.sh
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 # Set the default command to an interactive shell
 CMD ["/bin/bash"]
