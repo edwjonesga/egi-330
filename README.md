@@ -37,9 +37,9 @@ docker build -t egi-330-env .
 
 This command creates a Docker image named `egi-330-env` that contains all the necessary tools for this course.
 
-### Step 5: Run the Docker Container
+### Step 5: Run the Container and Initialize
 
-Next, run the container. This command will start an interactive shell inside the container and mount your current directory to the `/workspace` directory inside the container. This means any files you create in `/workspace` will appear in your local directory, and vice-versa.
+First, run the Docker container. This will start an interactive shell.
 
 - **For Linux and Mac:**
   ```sh
@@ -56,22 +56,32 @@ Next, run the container. This command will start an interactive shell inside the
   docker run -it --rm -v "%cd%":/workspace egi-330-env
   ```
 
-You are now inside the Docker container's shell.
-
-### Step 6: Initialize Your Project
-
-Inside the container's shell, run the `init.sh` script to set up your project:
-
+Once you are inside the container's shell, run the initialization script:
 ```sh
 init.sh
 ```
+The script will set up your project and then exit, stopping the container.
 
-The script will ask for the GitHub repository URL you copied in Step 1. Paste it in and press Enter. The script will then:
-1.  Copy the project files into your directory.
-2.  Initialize a local Git repository.
-3.  Set your GitHub repository as the `origin` remote.
+### Step 6: Start Your Development Session
 
-After the script finishes, you can push your new repository to GitHub by running:
+Run the exact same `docker run` command a second time to begin your development session.
+
+- **For Linux and Mac:**
+  ```sh
+  docker run -it --rm -v "$(pwd)":/workspace egi-330-env
+  ```
+
+- **For Windows (using PowerShell):**
+  ```sh
+  docker run -it --rm -v "${PWD}:/workspace" egi-330-env
+  ```
+
+- **For Windows (using Command Prompt):**
+  ```sh
+  docker run -it --rm -v "%cd%":/workspace egi-330-env
+  ```
+
+You are now inside your development environment, which has all the necessary tools and your project files. You can push the initial commit by running:
 ```sh
 git push -u origin main
 ```
