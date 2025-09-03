@@ -85,3 +85,13 @@ From within your development container, simply run:
 ./bin/pull-updates.sh
 ```
 This script will fetch the latest changes and merge them into your `main` branch. If there are any updates to the `Dockerfile` itself, you will need to exit the container, rebuild the image (Step 4), and then restart the container (Step 5).
+
+## MySQL Database
+
+This development environment includes a running MySQL server. The server starts automatically when you launch the container.
+
+You can connect to the database from within the container using the MySQL client:
+```sh
+mysql -u root
+```
+By default, the `root` user has no password. You can use this database for your development work.

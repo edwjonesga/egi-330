@@ -5,7 +5,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV PATH="/workspace/bin:${PATH}"
 
 # Install dependencies
-RUN apt-get update && apt-get install -y git curl ca-certificates wget rsync
+RUN apt-get update && apt-get install -y git curl ca-certificates wget rsync mysql-server mysql-client
 
 # Create the init.sh script
 RUN echo '#!/bin/bash' > /usr/local/bin/init.sh && \
@@ -60,6 +60,11 @@ RUN echo '#!/bin/bash' > /usr/local/bin/init.sh && \
 
 # Make the script executable
 RUN chmod +x /usr/local/bin/init.sh
+
+# Copy and set up the entrypoint
+COPY entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/entrypoint.sh
+ENTRYPOINT ["entrypoint.sh"]
 
 # Set the default command to an interactive shell
 CMD ["/bin/bash"]
