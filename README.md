@@ -32,84 +32,72 @@ Make sure the downloaded file is named `Dockerfile` with no file extension.
 Open a terminal (or PowerShell on Windows) in the directory where you saved the `Dockerfile` and run the following command to build the Docker image:
 
 ```sh
-docker build -t egi-330-env .
+docker build -t egi-330-dev-env .
 ```
+This command creates a Docker image named `egi-330-dev-env` that contains all the necessary tools and scripts for this course.
+> **Note for Linux Users:** If you get a `permission denied` error, you may need to run this command with `sudo`: `sudo docker build -t egi-330-dev-env .`.
 
-This command creates a Docker image named `egi-330-env` that contains all the necessary tools for this course.
+### Step 5: Run the Container to Initialize Your Project
 
-### Step 5: Run the Container and Initialize
-
-First, run the Docker container. This will start an interactive shell.
+Next, you need to run the container to initialize your local project. This will copy the project scripts into your directory and set up your git repository.
 
 - **For Linux and Mac:**
   ```sh
-  docker run -it --rm -v "$(pwd)":/workspace egi-330-env
+  docker run -it --rm -v "$(pwd)":/workspace egi-330-dev-env
   ```
-
 - **For Windows (using PowerShell):**
   ```sh
-  docker run -it --rm -v "${PWD}:/workspace" egi-330-env
+  docker run -it --rm -v "${PWD}:/workspace" egi-330-dev-env
   ```
-
 - **For Windows (using Command Prompt):**
   ```sh
-  docker run -it --rm -v "%cd%":/workspace egi-330-env
+  docker run -it --rm -v "%cd%":/workspace egi-330-dev-env
   ```
+> **Note for Linux Users:** You may also need to run this command with `sudo`.
 
 Once you are inside the container's shell, run the initialization script:
 ```sh
 init.sh
 ```
-The script will set up your project and then exit, stopping the container.
+The script will prompt you for your GitHub repository URL. After it completes, the container will exit. Your local directory will now contain all the project scripts.
 
-### Step 6: Start Your Development Session
+### Step 6: Start Your First Development Session
 
-Run the exact same `docker run` command a second time to begin your development session.
-
-- **For Linux and Mac:**
-  ```sh
-  docker run -it --rm -v "$(pwd)":/workspace egi-330-env
-  ```
-
-- **For Windows (using PowerShell):**
-  ```sh
-  docker run -it --rm -v "${PWD}:/workspace" egi-330-env
-  ```
-
-- **For Windows (using Command Prompt):**
-  ```sh
-  docker run -it --rm -v "%cd%":/workspace egi-330-env
-  ```
-
-You are now inside your development environment, which has all the necessary tools and your project files.
+Now you can start your development session. From this point onwards, you can use the convenient start script. In your terminal on your host machine, run:
+```sh
+./startContainer.sh
+```
+> **Note for Linux Users:** If you get a `permission denied` error, you may need to run this with `sudo`: `sudo ./startContainer.sh`.
 
 ### Step 7: Authenticate with GitHub
 
-Before you can push your code to your GitHub repository, you need to authenticate. We've included the GitHub CLI to make this easy.
-
-Inside the container, run the following command:
+Before you can push your code, you need to perform a one-time authentication with GitHub from inside the container.
+Inside the container's shell, run:
 ```sh
 gh auth login
 ```
-
-This command will ask you a few questions:
-- **What account do you want to log into?** Select `GitHub.com`.
-- **What is your preferred protocol for Git operations?** Select `HTTPS`.
-- **Authenticate Git with your GitHub credentials?** Select `Y` (Yes).
-- **How would you like to authenticate?** Select `Login with a web browser`.
-
-It will then give you a one-time code and ask you to open a URL in your browser. Copy the code, then open the link in your web browser on your main computer (not in the container) and paste the code to authorize the CLI.
-
-After you've authenticated, you can proceed to the final step.
+Follow the prompts, selecting `HTTPS` as your protocol and `Login with a web browser`. Copy the one-time code and open the URL in your browser on your host machine to complete the authentication.
 
 ### Step 8: Push Your Initial Commit
 
-Now that you are authenticated, you can push your initial commit to your remote repository on GitHub.
-
-Run the following command:
+Now that you are authenticated, you can push the initial commit to your repository.
 ```sh
 git push -u origin main
 ```
+
+---
+
+## Day-to-Day Workflow
+
+Once you have completed the one-time setup above, your daily workflow is much simpler.
+
+To start a new development session, just run the start script from your project directory:
+```sh
+./startContainer.sh
+```
+> **Note for Linux Users:** Remember to use `sudo` if required.
+
+This will launch the container and place you in the `/workspace` directory, ready to code.
 
 ## Keeping Your Project Up-to-Date
 

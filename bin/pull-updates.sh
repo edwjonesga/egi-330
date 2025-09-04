@@ -24,8 +24,8 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "Copying updated files into the branch..."
-# Use rsync to copy files, which is efficient and handles deletes
-rsync -av --delete --exclude='.git/' "$TEMP_DIR/" .
+# Use rsync to copy files, which is efficient
+rsync -av --exclude='.git/' "$TEMP_DIR/" .
 if [ $? -ne 0 ]; then
     echo "Failed to copy updated files. Aborting."
     git checkout main
@@ -34,6 +34,9 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "Committing the updates..."
+# Set user for this commit to match the init script
+git config --global user.email "init@egi-330init.ccu.edu"
+git config --global user.name "EGI Init Script"
 git add .
 # The `|| true` part prevents the script from exiting if there are no changes to commit
 git commit -m "Update from source repository" || true
