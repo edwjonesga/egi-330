@@ -19,55 +19,64 @@ If you don't already have Docker installed, please follow the instructions for y
 - **Windows/Mac:** Download and install [Docker Desktop](https://www.docker.com/products/docker-desktop).
 - **Linux:** Follow the official instructions to install the [Docker Engine](https://docs.docker.com/engine/install/).
 
-### Step 3: Clone the Project Repository
+### Step 3: Download the Dockerfile
 
-Instead of downloading individual files, clone the entire project setup repository to your local machine. Open a terminal and run:
-```sh
-git clone https://github.com/edwjonesga/egi-330.git
-cd egi-330
-```
-This will download all the necessary scripts and the `Dockerfile`.
+Download the `Dockerfile` from this repository and place it in a new, empty directory on your computer.
+
+[**Click here to download the Dockerfile**](https://raw.githubusercontent.com/edwjonesga/egi-330/main/Dockerfile)
+
+Make sure the downloaded file is named `Dockerfile` with no file extension.
 
 ### Step 4: Build the Docker Image
 
-Now, run the build script to create your Docker environment.
+Open a terminal (or PowerShell on Windows) in the directory where you saved the `Dockerfile` and run the following command to build the Docker image:
+
 ```sh
-./buildContainer.sh
+docker build -t egi-330-dev-env .
 ```
-> **Note for Linux Users:** If you get a `permission denied` error, you may need to run this command with `sudo`: `sudo ./buildContainer.sh`. This is because your user may not have permission to interact with the Docker service.
+This command creates a Docker image named `egi-330-dev-env` that contains all the necessary tools and scripts for this course.
+> **Note for Linux Users:** If you get a `permission denied` error, you may need to run this command with `sudo`: `sudo docker build -t egi-330-dev-env .`.
 
-### Step 5: Start the Container and Initialize
+### Step 5: Run the Container to Initialize Your Project
 
-Next, start the container. The first time you run it, it will launch an initialization script.
+Next, you need to run the container to initialize your local project. This will copy the project scripts into your directory and set up your git repository.
+
+- **For Linux and Mac:**
+  ```sh
+  docker run -it --rm -v "$(pwd)":/workspace egi-330-dev-env
+  ```
+- **For Windows (using PowerShell):**
+  ```sh
+  docker run -it --rm -v "${PWD}:/workspace" egi-330-dev-env
+  ```
+- **For Windows (using Command Prompt):**
+  ```sh
+  docker run -it --rm -v "%cd%":/workspace egi-330-dev-env
+  ```
+> **Note for Linux Users:** You may also need to run this command with `sudo`.
+
+Once you are inside the container's shell, run the initialization script:
+```sh
+init.sh
+```
+The script will prompt you for your GitHub repository URL. After it completes, the container will exit. Your local directory will now contain all the project scripts.
+
+### Step 6: Start Your First Development Session
+
+Now you can start your development session. From this point onwards, you can use the convenient start script. In your terminal on your host machine, run:
 ```sh
 ./startContainer.sh
 ```
-> **Note for Linux Users:** You may also need to run this command with `sudo`: `sudo ./startContainer.sh`.
-
-The `init.sh` script will run automatically. It will prompt you to enter the HTTPS URL for the empty GitHub repository you created in Step 1. After you provide the URL, the script will finish, and the container will stop.
-
-### Step 6: Start Your Development Session
-
-Run the start script again to begin your development session.
-```sh
-./startContainer.sh
-```
-You will now be inside the container's shell, in the `/workspace` directory, ready to work.
+> **Note for Linux Users:** If you get a `permission denied` error, you may need to run this with `sudo`: `sudo ./startContainer.sh`.
 
 ### Step 7: Authenticate with GitHub
 
-Before you can push your code, you need to perform a one-time authentication with GitHub.
-Inside the container, run:
+Before you can push your code, you need to perform a one-time authentication with GitHub from inside the container.
+Inside the container's shell, run:
 ```sh
 gh auth login
 ```
-Follow the prompts:
-- **What account do you want to log into?** Select `GitHub.com`.
-- **What is your preferred protocol for Git operations?** Select `HTTPS`.
-- **Authenticate Git with your GitHub credentials?** Select `Y` (Yes).
-- **How would you like to authenticate?** Select `Login with a web browser`.
-
-Copy the one-time code, open the provided URL in your browser on your host machine, and paste the code to authorize the CLI.
+Follow the prompts, selecting `HTTPS` as your protocol and `Login with a web browser`. Copy the one-time code and open the URL in your browser on your host machine to complete the authentication.
 
 ### Step 8: Push Your Initial Commit
 
@@ -75,6 +84,20 @@ Now that you are authenticated, you can push the initial commit to your reposito
 ```sh
 git push -u origin main
 ```
+
+---
+
+## Day-to-Day Workflow
+
+Once you have completed the one-time setup above, your daily workflow is much simpler.
+
+To start a new development session, just run the start script from your project directory:
+```sh
+./startContainer.sh
+```
+> **Note for Linux Users:** Remember to use `sudo` if required.
+
+This will launch the container and place you in the `/workspace` directory, ready to code.
 
 ## Keeping Your Project Up-to-Date
 
