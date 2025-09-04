@@ -4,6 +4,9 @@ FROM ubuntu:22.04
 ENV DEBIAN_FRONTEND=noninteractive
 ENV PATH="/workspace/bin:${PATH}"
 
+# Set the working directory
+WORKDIR /workspace
+
 # Install dependencies
 RUN apt-get update && apt-get install -y git curl ca-certificates wget rsync mysql-server mysql-client lsb-release
 
