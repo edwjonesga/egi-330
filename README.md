@@ -63,11 +63,21 @@ The script will prompt you for your GitHub repository URL. After it completes, t
 
 ### Step 6: Start Your First Development Session
 
-Now you can start your development session. From this point onwards, you can use the convenient start script. In your terminal on your host machine, run:
-```sh
-./startContainer.sh
-```
-> **Note for Linux Users:** If you get a `permission denied` error, you may need to run this with `sudo`: `sudo ./startContainer.sh`.
+To start your development session, run the appropriate command for your operating system.
+
+- **For Linux and Mac:**
+  ```sh
+  docker run -it --rm -v "$(pwd)":/workspace egi-330-dev-env
+  ```
+- **For Windows (using PowerShell):**
+  ```sh
+  docker run -it --rm -v "${PWD}:/workspace" egi-330-dev-env
+  ```
+- **For Windows (using Command Prompt):**
+  ```sh
+  docker run -it --rm -v "%cd%":/workspace egi-330-dev-env
+  ```
+> **Note for Linux/Mac Users:** After the initialization step, a convenience script named `./startContainer.sh` is available. You can use this as a shortcut instead of the longer `docker run` command. Remember to use `sudo` if you needed it for the Docker commands.
 
 ### Step 7: Authenticate with GitHub
 
@@ -89,15 +99,21 @@ git push -u origin main
 
 ## Day-to-Day Workflow
 
-Once you have completed the one-time setup above, your daily workflow is much simpler.
+Once you have completed the one-time setup above, you can start a new development session at any time by running the appropriate `docker run` command for your system from your project directory.
 
-To start a new development session, just run the start script from your project directory:
-```sh
-./startContainer.sh
-```
-> **Note for Linux Users:** Remember to use `sudo` if required.
-
-This will launch the container and place you in the `/workspace` directory, ready to code.
+- **For Linux and Mac:**
+  ```sh
+  docker run -it --rm -v "$(pwd)":/workspace egi-330-dev-env
+  ```
+- **For Windows (using PowerShell):**
+  ```sh
+  docker run -it --rm -v "${PWD}:/workspace" egi-330-dev-env
+  ```
+- **For Windows (using Command Prompt):**
+  ```sh
+  docker run -it --rm -v "%cd%":/workspace egi-330-dev-env
+  ```
+> **Note for Linux/Mac Users:** You can also use the `./startContainer.sh` script as a shortcut. Remember to use `sudo` if required.
 
 ## Keeping Your Project Up-to-Date
 

@@ -39,7 +39,7 @@ RUN echo '#!/bin/bash' > /usr/local/bin/init.sh && \
     echo '# Initialize a new git repository' >> /usr/local/bin/init.sh && \
     echo 'echo "Initializing a new git repository..."' >> /usr/local/bin/init.sh && \
     echo 'cd /workspace/' >> /usr/local/bin/init.sh && \
-    echo 'git config --global --add safe.directory /workspace' >> /usr/local/bin/init.sh && \
+    echo 'git config --global --add safe.directory /workspace' >> /usr/local/bin/init.sh &&
     echo 'git init' >> /usr/local/bin/init.sh && \
     echo '' >> /usr/local/bin/init.sh && \
     echo '# Commit initial files and create branches' >> /usr/local/bin/init.sh && \
